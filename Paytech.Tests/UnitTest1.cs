@@ -140,18 +140,8 @@ namespace Paytech.Tests
         [TestMethod]
         public void Test_Age_Property()
         {
-            var buffer = new byte[10];
-            var animal = new Animal();
-
-            new Random().NextBytes(buffer);
-
-            foreach (var number in buffer)
-            {
-                var age = number % 30;
-                animal.Birth = DateTime.Today.AddYears(-age);
-
-                Assert.AreEqual(age, animal.Age);
-            }
+            foreach (var animal in inMemory.GetAnimals())
+                Assert.AreEqual(animal.Id, animal.Age);
         }
 
         #endregion
@@ -212,7 +202,7 @@ namespace Paytech.Tests
         /// opcional: coordinar los hilos (provider, consumerA y consumerB) para que el hilo provider 
         /// consiga prover datos a través de la variable number, donde daca vez que el hilo provider llene 
         /// la variable los dos otros hilos puedan consumir (leer) la variable.
-        /// </summary>
+        /// </summary>       
         [TestMethod]
         public void Test_Coordenate_Threads()
         {
@@ -226,22 +216,22 @@ namespace Paytech.Tests
                 foreach (var actual in numbers)
                     number = actual;
             });
-            var consumerA = new Thread(a => 
+            var consumerA = new Thread(a =>
             {
                 var numbers = new List<int>();
 
                 while (number < 11)
-                    if ((number / 2) == 0)
+                    if ((number % 2) == 0)
                         numbers.Add(number);
 
                 numbersFromA = numbers.ToArray();
             });
-            var consumerB = new Thread(a => 
+            var consumerB = new Thread(a =>
             {
                 var numbers = new List<int>();
 
                 while (number < 11)
-                    if ((number / 2) != 0)
+                    if ((number % 2) != 0)
                         numbers.Add(number);
 
                 numbersFromB = numbers.ToArray();
@@ -256,17 +246,18 @@ namespace Paytech.Tests
             consumerB.Join();
 
             Assert.AreEqual(5, numbersFromA.Length);
-            Assert.AreEqual(1, numbersFromA[0]);
-            Assert.AreEqual(2, numbersFromA[1]);
-            Assert.AreEqual(3, numbersFromA[2]);
-            Assert.AreEqual(4, numbersFromA[3]);
-            Assert.AreEqual(5, numbersFromA[4]);
+            Assert.AreEqual(2, numbersFromA[0]);
+            Assert.AreEqual(4, numbersFromA[1]);
+            Assert.AreEqual(6, numbersFromA[2]);
+            Assert.AreEqual(8, numbersFromA[3]);
+            Assert.AreEqual(10, numbersFromA[4]);
+
             Assert.AreEqual(5, numbersFromB.Length);
             Assert.AreEqual(1, numbersFromB[0]);
-            Assert.AreEqual(2, numbersFromB[1]);
-            Assert.AreEqual(3, numbersFromB[2]);
-            Assert.AreEqual(4, numbersFromB[3]);
-            Assert.AreEqual(5, numbersFromB[4]);
+            Assert.AreEqual(3, numbersFromB[1]);
+            Assert.AreEqual(5, numbersFromB[2]);
+            Assert.AreEqual(7, numbersFromB[3]);
+            Assert.AreEqual(9, numbersFromB[4]);
         }
 
         #endregion
