@@ -1,5 +1,0 @@
-C:\Users\leonardo.justin00000\Desktop\Paytech\Paytech.Domain\Paytech.Domain\bin\Debug\Paytech.Domain.dll
-C:\Users\leonardo.justin00000\Desktop\Paytech\Paytech.Domain\Paytech.Domain\bin\Debug\Paytech.Domain.pdb
-C:\Users\leonardo.justin00000\Desktop\Paytech\Paytech.Domain\Paytech.Domain\obj\Debug\Paytech.Domain.csprojResolveAssemblyReference.cache
-C:\Users\leonardo.justin00000\Desktop\Paytech\Paytech.Domain\Paytech.Domain\obj\Debug\Paytech.Domain.dll
-C:\Users\leonardo.justin00000\Desktop\Paytech\Paytech.Domain\Paytech.Domain\obj\Debug\Paytech.Domain.pdb

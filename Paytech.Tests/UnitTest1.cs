@@ -155,7 +155,7 @@ namespace Paytech.Tests
         public void Test_Api_Método_Test()
         {
             using (var client = new HttpClient())
-            using (var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:49976/api/values/test"))
+            using (var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/api/values/test"))
             {
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
 
@@ -179,7 +179,7 @@ namespace Paytech.Tests
         public void Test_Api_Método_Animals()
         {
             using (var client = new HttpClient())
-            using (var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:49976/api/values/animals"))
+            using (var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/api/values/animals"))
             {
                 var animals = new Animal[0];
 

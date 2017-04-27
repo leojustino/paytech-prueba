@@ -10,6 +10,13 @@ namespace Paytech.Repositories.DapperImplementation
 {
     class PeopleRepository : IPeopleRepository
     {
+        public PeopleRepository(string connectionString)
+        {
+            this.connectionString = connectionString;
+        }
+
+        string connectionString;     
+        
         IEnumerable<Person> IPeopleRepository.GetPeople()
         {
             throw new NotImplementedException();

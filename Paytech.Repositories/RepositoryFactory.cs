@@ -43,7 +43,7 @@ namespace Paytech.Repositories
             }
         }
 
-        internal const string CONNECTION_STRING = "Data Source=(local); Initial Catalog=test; Persist Security Info=True;User ID=sa; Password=CQadmin2012";
+        internal const string CONNECTION_STRING = "Data Source=(local); Initial Catalog=test; Persist Security Info=True;trusted_connection=true";
 
         public IServiceContainer Container { get; private set; }
     }
