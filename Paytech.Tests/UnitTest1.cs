@@ -36,15 +36,15 @@ namespace Paytech.Tests
             var animals = inMemory.GetAnimals().ToArray();
             var testedAnimals = application.GetAnimals().ToArray();
 
-            Assert.AreEqual(animals.Length, testedAnimals.Length);
+            Assert.AreEqual(animals.Length, testedAnimals.Length, "cantidad errada de animales");
 
             foreach (var animal in animals)
             {
                 var testedAnimal = testedAnimals.FirstOrDefault(a => a.Id == animal.Id);
 
-                Assert.IsNotNull(testedAnimal);
-                Assert.IsTrue(animal.Equals(testedAnimal));
-                Assert.IsTrue(animal.Owner.Equals(testedAnimal.Owner));
+                Assert.IsNotNull(testedAnimal, "el animal no existe");
+                Assert.IsTrue(animal.Equals(testedAnimal), "el animal no es igual");
+                Assert.IsTrue(animal.Owner.Equals(testedAnimal.Owner), "el dueño no es valido");
             }
         }
         static void Test_GetAnimal(IApplication application)
@@ -53,9 +53,9 @@ namespace Paytech.Tests
             {
                 var testedAnimal = application.GetAnimal(animal.Id);
 
-                Assert.IsNotNull(testedAnimal);
-                Assert.IsTrue(animal.Equals(testedAnimal));
-                Assert.IsTrue(animal.Owner.Equals(testedAnimal.Owner));
+                Assert.IsNotNull(testedAnimal, "el animal no existe");
+                Assert.IsTrue(animal.Equals(testedAnimal), "el animal no es igual");
+                Assert.IsTrue(animal.Owner.Equals(testedAnimal.Owner), "el dueño no es valido");
             }
         }
         static void Test_GetPeople(IApplication application)
@@ -63,15 +63,15 @@ namespace Paytech.Tests
             var people = inMemory.GetPeople().ToArray();
             var testedPeople = application.GetPeople().ToArray();
 
-            Assert.AreEqual(people.Length, testedPeople.Length);
+            Assert.AreEqual(people.Length, testedPeople.Length, "la cantidad de personas no esta correcta");
 
             foreach (var person in people)
             {
                 var testedPerson = testedPeople.FirstOrDefault(a => a.Id == person.Id);
 
-                Assert.IsNotNull(testedPerson);
-                Assert.IsTrue(person.Equals(testedPerson));
-                Assert.AreEqual(person.Animals.Count(), testedPerson.Animals.Count());
+                Assert.IsNotNull(testedPerson, "la persona retornada no existe");
+                Assert.IsTrue(person.Equals(testedPerson), "la persona neo es igual");
+                Assert.AreEqual(person.Animals.Count(), testedPerson.Animals.Count(), "cantidad invalida de animales");
             }
         }
         static void Test_GetPerson(IApplication application)
@@ -80,9 +80,9 @@ namespace Paytech.Tests
             {
                 var testedPerson = application.GetPerson(person.Id);
 
-                Assert.IsNotNull(testedPerson);
-                Assert.IsTrue(person.Equals(testedPerson));
-                Assert.AreEqual(person.Animals.Count(), testedPerson.Animals.Count());
+                Assert.IsNotNull(testedPerson, "la persona retornada no existe");
+                Assert.IsTrue(person.Equals(testedPerson), "la persona no es igual");
+                Assert.AreEqual(person.Animals.Count(), testedPerson.Animals.Count(), "cantidad invalida de animales");
             }
         }
 
@@ -90,13 +90,26 @@ namespace Paytech.Tests
         ///  como entity framework estas competamente implementado todas las pruebas se han exitosas.
         /// </summary>
         [TestMethod]
-        public void Test_EntityFramework()
+        public void Test_EntityFramework_GetAnimals()
         {
             Test_GetAnimals(entityFramework);
+        }
+        [TestMethod]
+        public void Test_EntityFramework_GetPeople()
+        {
             Test_GetPeople(entityFramework);
+        }
+        [TestMethod]
+        public void Test_EntityFramework_GetPerson()
+        {
             Test_GetPerson(entityFramework);
+        }
+        [TestMethod]
+        public void Test_EntityFramework_GetAnimal()
+        {
             Test_GetAnimal(entityFramework);
         }
+
 
         /// <summary>
         /// apenas el metodo IAnimalsRepository.GetAnimalEstas implementado como forma de ejemplo. 
@@ -106,11 +119,23 @@ namespace Paytech.Tests
         ///     IPeopleRepository.GetPeople;
         /// </summary>
         [TestMethod]
-        public void Test_Ado()
+        public void Test_Ado_GetAnimal()
         {
             Test_GetAnimal(ado);
+        }
+        [TestMethod]
+        public void Test_Ado_GetAnimals()
+        {
             Test_GetAnimals(ado);
+        }
+        [TestMethod]
+        public void Test_Ado_GetPeople()
+        {
             Test_GetPeople(ado);
+        }
+        [TestMethod]
+        public void Test_Ado_GetPerson()
+        {
             Test_GetPerson(ado);
         }
 
@@ -122,11 +147,23 @@ namespace Paytech.Tests
         ///     IPeopleRepository.GetPeople;
         /// </summary>
         [TestMethod]
-        public void Test_Dapper()
+        public void Test_Dapper_GetAnimal()
         {
             Test_GetAnimal(dapper);
+        }
+        [TestMethod]
+        public void Test_Dapper_GetAnimals()
+        {
             Test_GetAnimals(dapper);
+        }
+        [TestMethod]
+        public void Test_Dapper_GetPeople()
+        {
             Test_GetPeople(dapper);
+        }
+        [TestMethod]
+        public void Test_Dapper_GetPerson()
+        {
             Test_GetPerson(dapper);
         }
 
@@ -182,9 +219,8 @@ namespace Paytech.Tests
             using (var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/api/values/animals"))
             {
                 var animals = new Animal[0];
-
+                
                 //a implementar
-
 
                 if (animals.Length > 0)
                     foreach (var animal in animals)
@@ -196,71 +232,7 @@ namespace Paytech.Tests
 
         #endregion
 
-        #region threading tests
-
-        /// <summary>
-        /// opcional: coordinar los hilos (provider, consumerA y consumerB) para que el hilo provider 
-        /// consiga prover datos a través de la variable number, donde daca vez que el hilo provider llene 
-        /// la variable los dos otros hilos puedan consumir (leer) la variable.
-        /// </summary>       
-        [TestMethod]
-        public void Test_Coordenate_Threads()
-        {
-            var number = 0;
-            var numbersFromA = new int[0];
-            var numbersFromB = new int[0];
-            var provider = new Thread(a =>
-            {
-                var numbers = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-
-                foreach (var actual in numbers)
-                    number = actual;
-            });
-            var consumerA = new Thread(a =>
-            {
-                var numbers = new List<int>();
-
-                while (number < 11)
-                    if ((number % 2) == 0)
-                        numbers.Add(number);
-
-                numbersFromA = numbers.ToArray();
-            });
-            var consumerB = new Thread(a =>
-            {
-                var numbers = new List<int>();
-
-                while (number < 11)
-                    if ((number % 2) != 0)
-                        numbers.Add(number);
-
-                numbersFromB = numbers.ToArray();
-            });
-
-            provider.Start();
-            consumerA.Start();
-            consumerB.Start();
-
-            provider.Join();
-            consumerA.Join();
-            consumerB.Join();
-
-            Assert.AreEqual(5, numbersFromA.Length);
-            Assert.AreEqual(2, numbersFromA[0]);
-            Assert.AreEqual(4, numbersFromA[1]);
-            Assert.AreEqual(6, numbersFromA[2]);
-            Assert.AreEqual(8, numbersFromA[3]);
-            Assert.AreEqual(10, numbersFromA[4]);
-
-            Assert.AreEqual(5, numbersFromB.Length);
-            Assert.AreEqual(1, numbersFromB[0]);
-            Assert.AreEqual(3, numbersFromB[1]);
-            Assert.AreEqual(5, numbersFromB[2]);
-            Assert.AreEqual(7, numbersFromB[3]);
-            Assert.AreEqual(9, numbersFromB[4]);
-        }
-
-        #endregion
+        
 
 
     }

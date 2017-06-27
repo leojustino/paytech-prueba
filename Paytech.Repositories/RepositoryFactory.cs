@@ -43,7 +43,8 @@ namespace Paytech.Repositories
             }
         }
 
-        internal const string CONNECTION_STRING = "Data Source=(local); Initial Catalog=test; Persist Security Info=True;trusted_connection=true";
+        //internal const string CONNECTION_STRING = "Data Source=(local); Initial Catalog=test; Persist Security Info=True;trusted_connection=true";
+        internal const string CONNECTION_STRING = "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;AttachDbFileName=c:\\test\\test.mdf;Database=test";
 
         public IServiceContainer Container { get; private set; }
     }
